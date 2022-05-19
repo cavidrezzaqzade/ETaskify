@@ -23,10 +23,10 @@ import java.util.Set;
                                                                                         "developers in the team"))
 @SecurityScheme(name = "bearerAuth", type = SecuritySchemeType.HTTP, scheme = "bearer")
 @SpringBootApplication(exclude= {UserDetailsServiceAutoConfiguration.class})
-public class BookAppAuthApplication {
+public class ETaskifyApplication {
 
     public static void main(String[] args) {
-        ConfigurableApplicationContext configurableApplicationContext = SpringApplication.run(BookAppAuthApplication.class, args);
+        ConfigurableApplicationContext configurableApplicationContext = SpringApplication.run(ETaskifyApplication.class, args);
 
         //startup time initial data inserting to database as admin user
         UserRepository user = configurableApplicationContext.getBean(UserRepository.class);
