@@ -1,8 +1,8 @@
 package az.abb.etaskify.service;
 
-import az.abb.etaskify.domain.Role;
-import az.abb.etaskify.domain.User;
-import az.abb.etaskify.domain.UserDto;
+import az.abb.etaskify.domain.auth.Role;
+import az.abb.etaskify.domain.auth.User;
+import az.abb.etaskify.domain.auth.UserDto;
 import az.abb.etaskify.entity.RoleEntity;
 import az.abb.etaskify.entity.UserEntity;
 import az.abb.etaskify.exception.AuthException;

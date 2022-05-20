@@ -1,5 +1,6 @@
-package az.abb.etaskify.domain;
+package az.abb.etaskify.domain.jwt;
 
+import az.abb.etaskify.domain.auth.Role;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.Authentication;

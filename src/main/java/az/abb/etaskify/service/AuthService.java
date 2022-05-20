@@ -1,8 +1,8 @@
 package az.abb.etaskify.service;
 
-import az.abb.etaskify.domain.JwtRequest;
-import az.abb.etaskify.domain.JwtResponse;
-import az.abb.etaskify.domain.User;
+import az.abb.etaskify.domain.jwt.JwtRequest;
+import az.abb.etaskify.domain.jwt.JwtResponse;
+import az.abb.etaskify.domain.auth.User;
 import az.abb.etaskify.exception.AuthException;
 import az.abb.etaskify.response.MessageResponse;
 import az.abb.etaskify.response.Reason;

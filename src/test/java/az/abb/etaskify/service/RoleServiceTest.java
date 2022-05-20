@@ -1,6 +1,6 @@
 package az.abb.etaskify.service;
 
-import az.abb.etaskify.domain.RoleDto;
+import az.abb.etaskify.domain.auth.RoleDto;
 import az.abb.etaskify.entity.RoleEntity;
 import az.abb.etaskify.entity.UserEntity;
 import az.abb.etaskify.mapper.RoleMapper;

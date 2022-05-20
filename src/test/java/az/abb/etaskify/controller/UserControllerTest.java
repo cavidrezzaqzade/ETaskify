@@ -1,6 +1,6 @@
 package az.abb.etaskify.controller;
 
-import az.abb.etaskify.domain.UserDto;
+import az.abb.etaskify.domain.auth.UserDto;
 import az.abb.etaskify.filter.JwtFilter;
 import az.abb.etaskify.response.MessageResponse;
 import az.abb.etaskify.response.Reason;

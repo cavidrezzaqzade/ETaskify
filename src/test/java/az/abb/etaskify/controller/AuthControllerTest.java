@@ -1,17 +1,12 @@
 package az.abb.etaskify.controller;
 
-import az.abb.etaskify.domain.JwtRequest;
-import az.abb.etaskify.domain.JwtResponse;
-import az.abb.etaskify.domain.RefreshJwtRequest;
-import az.abb.etaskify.domain.UserDto;
+import az.abb.etaskify.domain.jwt.JwtRequest;
+import az.abb.etaskify.domain.jwt.JwtResponse;
+import az.abb.etaskify.domain.jwt.RefreshJwtRequest;
 import az.abb.etaskify.filter.JwtFilter;
 import az.abb.etaskify.response.MessageResponse;
 import az.abb.etaskify.response.Reason;
 import az.abb.etaskify.service.AuthService;
-import az.abb.etaskify.service.JwtProvider;
-import az.abb.etaskify.service.UserService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,11 +24,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.List;
-
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;

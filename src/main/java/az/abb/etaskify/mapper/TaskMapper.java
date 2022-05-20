@@ -1,7 +1,6 @@
 package az.abb.etaskify.mapper;
 
-import az.abb.etaskify.domain.TaskDto;
-import az.abb.etaskify.domain.UserDto;
+import az.abb.etaskify.domain.auth.TaskDto;
 import az.abb.etaskify.entity.TaskEntity;
 import az.abb.etaskify.entity.UserEntity;
 import org.mapstruct.Mapper;

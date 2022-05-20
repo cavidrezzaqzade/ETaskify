@@ -1,4 +1,4 @@
-package az.abb.etaskify.domain;
+package az.abb.etaskify.domain.jwt;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

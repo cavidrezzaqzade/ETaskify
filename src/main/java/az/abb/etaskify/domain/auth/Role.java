@@ -1,4 +1,4 @@
-package az.abb.etaskify.domain;
+package az.abb.etaskify.domain.auth;
 
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;

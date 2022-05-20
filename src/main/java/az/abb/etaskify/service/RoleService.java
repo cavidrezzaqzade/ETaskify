@@ -1,6 +1,6 @@
 package az.abb.etaskify.service;
 
-import az.abb.etaskify.domain.RoleDto;
+import az.abb.etaskify.domain.auth.RoleDto;
 import az.abb.etaskify.entity.RoleEntity;
 import az.abb.etaskify.mapper.RoleMapper;
 import az.abb.etaskify.repository.RoleRepository;
@@ -29,7 +29,7 @@ public class RoleService {
         if(roleRepository.existsByRoleNameIgnoreCase(role.getRoleName()))
             map.put("roleName", "already exists");
         if(!map.isEmpty()) {
-            log.error("RoleService/addNewRole method with rolename already exists -> status:" + HttpStatus.UNPROCESSABLE_ENTITY);
+            map.forEach((k, v) -> log.error("RoleService/addNewRole method ended with " + k + " ::: " +  v + "-> status=" + HttpStatus.UNPROCESSABLE_ENTITY));
             return MessageResponse.response(Reason.ALREADY_EXIST.getValue(), null, map, HttpStatus.UNPROCESSABLE_ENTITY);
         }
         RoleEntity roleEntity = new RoleEntity();
@@ -58,14 +58,14 @@ public class RoleService {
         if(roleEntity.isEmpty())
             map.put("roleId", "role does not exist");
         if(!map.isEmpty()){
-            log.error("RoleService/deleteRole method ended with roleId doesn't exists -> status:" + HttpStatus.UNPROCESSABLE_ENTITY);
+            map.forEach((k, v) -> log.error("RoleService/deleteRole method ended with " + k + " ::: " +  v + "-> status=" + HttpStatus.UNPROCESSABLE_ENTITY));
             return MessageResponse.response(Reason.VALIDATION_ERRORS.getValue(), null, map, HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         if(!roleEntity.get().getUsers().isEmpty())
             map.put("roleId", "foreign key constraint violation");
         if(!map.isEmpty()){
-            log.error("RoleService/deleteRole method ended with roleId fk violation -> status:" + HttpStatus.UNPROCESSABLE_ENTITY);
+            map.forEach((k, v) -> log.error("RoleService/deleteRole method ended with " + k + " ::: " +  v + "-> status=" + HttpStatus.UNPROCESSABLE_ENTITY));
             return MessageResponse.response(Reason.VALIDATION_ERRORS.getValue(), null, map, HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
@@ -83,7 +83,7 @@ public class RoleService {
         if(roleEntity.isEmpty())
             map.put("roleId", "role does not exist");
         if(!map.isEmpty()) {
-            log.error("RoleService/updateRole method ended with roleId doesn't exists -> status:" + HttpStatus.UNPROCESSABLE_ENTITY);
+            map.forEach((k, v) -> log.error("RoleService/updateRole method ended with " + k + " ::: " +  v + "-> status=" + HttpStatus.UNPROCESSABLE_ENTITY));
             return MessageResponse.response(Reason.VALIDATION_ERRORS.getValue(), null, map, HttpStatus.UNPROCESSABLE_ENTITY);
         }
         Optional<RoleEntity> roleByRoleName = roleRepository.findByRoleNameIgnoreCase(role.getRoleName());
@@ -91,7 +91,7 @@ public class RoleService {
             if(!Objects.equals(roleByRoleName.get().getId(), roleId) && roleByRoleName.get().getRoleName().equalsIgnoreCase(role.getRoleName()))
                 map.put("roleName", "roleName already exists");
         if(!map.isEmpty()) {
-            log.error("RoleService/updateRole method ended with rolename already exists -> status:" + HttpStatus.UNPROCESSABLE_ENTITY);
+            map.forEach((k, v) -> log.error("RoleService/updateRole method ended with " + k + " ::: " +  v + "-> status=" + HttpStatus.UNPROCESSABLE_ENTITY));
             return MessageResponse.response(Reason.VALIDATION_ERRORS.getValue(), null, map, HttpStatus.UNPROCESSABLE_ENTITY);
         }
         roleEntity.get().setRoleName(role.getRoleName().toUpperCase(Locale.ROOT));

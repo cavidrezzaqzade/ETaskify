@@ -11,7 +11,9 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
     boolean existsByUsernameIgnoreCase(String name);
+    boolean existsByEmailIgnoreCase(String name);
     Optional<UserEntity> findByUsernameIgnoreCase(String userName);
+    Optional<UserEntity> findByEmailIgnoreCase(String email);
 
     @Query(value = "select u.id from users u", nativeQuery = true)
     List<Long> findAllIds();

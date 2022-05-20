@@ -1,6 +1,6 @@
 package az.abb.etaskify.filter;
 
-import az.abb.etaskify.domain.JwtAuthentication;
+import az.abb.etaskify.domain.jwt.JwtAuthentication;
 import az.abb.etaskify.service.JwtProvider;
 import az.abb.etaskify.service.JwtUtils;
 import io.jsonwebtoken.Claims;

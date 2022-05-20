@@ -1,7 +1,7 @@
 package az.abb.etaskify.service;
 
-import az.abb.etaskify.domain.TaskDto;
-import az.abb.etaskify.domain.UserDto;
+import az.abb.etaskify.domain.auth.TaskDto;
+import az.abb.etaskify.entity.OrganizationEntity;
 import az.abb.etaskify.entity.TaskEntity;
 import az.abb.etaskify.entity.UserEntity;
 import az.abb.etaskify.mapper.TaskMapper;
@@ -14,11 +14,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author caci
@@ -34,16 +38,25 @@ public class TaskService {
     private final UserRepository userRepository;
     private final TaskMapper taskMapper;
 
+    public String getUsernameFromToken() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUserName="";
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            currentUserName = (String) authentication.getPrincipal();
+        }
+        return currentUserName;
+    }
+
     public ResponseEntity<?> addNewTask(TaskDto task){
         log.info("TaskService/addNewTask method started");
         Map<String, String> map = new HashMap<>();
 
-        List<Long> rolesIds = userRepository.findAllIds();
+        List<Long> userIds = userRepository.findAllIds();
 
-        if(!CheckContains(task.getUsers(), rolesIds))
+        if(!CheckContains(task.getUsers(), userIds))
             map.put("users", "problem with user id(s)");
         if(!map.isEmpty()){
-            log.error("TaskService/addNewTask method ended with roleId(s) does not exist error -> status:" + HttpStatus.UNPROCESSABLE_ENTITY);
+            map.forEach((k, v) -> log.error("RoleService/addNewRole method ended with " + k + " ::: " +  v + "-> status=" + HttpStatus.UNPROCESSABLE_ENTITY));
             return MessageResponse.response(Reason.VALIDATION_ERRORS.getValue(), null, map, HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
@@ -60,6 +73,14 @@ public class TaskService {
 
                 taskEntity.addUser(user);
             }
+
+        Optional<UserEntity> user = userRepository.findByUsernameIgnoreCase(getUsernameFromToken());
+
+        if(user.isPresent()){
+            OrganizationEntity org = new OrganizationEntity();
+            org.setId(user.get().getOrganization().getId());
+            taskEntity.setOrganization(org);
+        }
 
         taskRepository.save(taskEntity);
         TaskDto taskDto = taskMapper.taskToTaskDto(taskEntity);

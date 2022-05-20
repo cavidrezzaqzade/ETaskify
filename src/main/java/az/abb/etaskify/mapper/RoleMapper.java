@@ -1,6 +1,6 @@
 package az.abb.etaskify.mapper;
 
-import az.abb.etaskify.domain.RoleDto;
+import az.abb.etaskify.domain.auth.RoleDto;
 import az.abb.etaskify.entity.RoleEntity;
 import org.mapstruct.Mapper;
 

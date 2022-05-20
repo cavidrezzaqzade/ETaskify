@@ -1,6 +1,6 @@
 package az.abb.etaskify.controller;
 
-import az.abb.etaskify.domain.UserDto;
+import az.abb.etaskify.domain.auth.UserDto;
 import az.abb.etaskify.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

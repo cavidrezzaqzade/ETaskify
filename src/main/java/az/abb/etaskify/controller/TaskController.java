@@ -1,7 +1,6 @@
 package az.abb.etaskify.controller;
 
-import az.abb.etaskify.domain.TaskDto;
-import az.abb.etaskify.domain.UserDto;
+import az.abb.etaskify.domain.auth.TaskDto;
 import az.abb.etaskify.service.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import javax.validation.Valid;
 
 /**
@@ -34,4 +32,7 @@ public class TaskController {
     public ResponseEntity<?> addNewUser(@Valid @RequestBody TaskDto task) {
         return  taskService.addNewTask(task);
     }
+
+
+
 }

@@ -21,7 +21,7 @@ import java.util.Set;
 public class TaskEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
     @Column(name = "title", nullable = false)
@@ -43,6 +43,9 @@ public class TaskEntity {
             inverseJoinColumns =
             @JoinColumn(name="user_id",referencedColumnName = "id"))
     private Set<UserEntity> users = new HashSet<>();
+
+    @OneToOne(fetch = FetchType.LAZY)
+    private OrganizationEntity organization;
 
     public void addUser(UserEntity userEntity) {
         users.add(userEntity);

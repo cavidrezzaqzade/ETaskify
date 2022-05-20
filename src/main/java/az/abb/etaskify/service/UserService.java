@@ -1,7 +1,7 @@
 package az.abb.etaskify.service;
 
-import az.abb.etaskify.domain.User;
-import az.abb.etaskify.domain.UserDto;
+import az.abb.etaskify.domain.auth.User;
+import az.abb.etaskify.domain.auth.UserDto;
 import az.abb.etaskify.entity.RoleEntity;
 import az.abb.etaskify.entity.UserEntity;
 import az.abb.etaskify.exception.AuthException;
@@ -39,26 +39,6 @@ public class UserService {
         return converter.entityToDtoLogin(user);
     }
 
-    //bu metodu testinge gore Converter class-ına daşıdım. private metodları test etmək məntiqli deil
-//    private Optional<User> entityToDtoLogin(UserEntity entity) {
-//        Optional<User> user = Optional.of(new User());
-//
-//        user.get().setLogin(entity.getUsername());
-//        user.get().setPassword(entity.getPassword());
-//        user.get().setFirstName(entity.getName());
-//        user.get().setLastName(entity.getSurname());
-//
-//        Set<Role> roles = new HashSet<>();
-//        for (RoleEntity roleEntity : entity.getRoles()) {
-//            Role r = new Role();
-//            r.setRoleName(roleEntity.getRoleName());
-//            roles.add(r);
-//        }
-//        user.get().setRoles(roles);
-//
-//        return user;
-//    }
-
     public ResponseEntity<?> getUsers(){
         log.info("UserService/getUsers method started");
         List<UserEntity> users = userRepository.findAll();
@@ -71,19 +51,16 @@ public class UserService {
         log.info("UserService/addNewUser method started");
         Map<String, String> map = new HashMap<>();
 
-        if(userRepository.existsByUsernameIgnoreCase(user.getUsername()))
-            map.put("username", "data already exists");
-        if(!map.isEmpty()) {
-            log.error("UserService/addNewUser method ended with username already exists -> status:" + HttpStatus.UNPROCESSABLE_ENTITY);
-            return MessageResponse.response(Reason.VALIDATION_ERRORS.getValue(), null, map, HttpStatus.UNPROCESSABLE_ENTITY);
-        }
-
         List<Long> rolesIds = roleRepository.findAllIds();
 
+        if(userRepository.existsByUsernameIgnoreCase(user.getUsername()))
+            map.put("username", "data already exists");
+        if(userRepository.existsByEmailIgnoreCase(user.getEmail()))
+            map.put("email", "data already exists");
         if(!CheckContains(user.getRoles(), rolesIds))
             map.put("roles", "problem with role id(s)");
-        if(!map.isEmpty()){
-            log.error("UserService/addNewUser method ended with roleName(s) does not exist error -> status:" + HttpStatus.UNPROCESSABLE_ENTITY);
+        if(!map.isEmpty()) {
+            map.forEach((k, v) -> log.error("UserService/addNewUser method ended with " + k + " ::: " +  v + "-> status=" + HttpStatus.UNPROCESSABLE_ENTITY));
             return MessageResponse.response(Reason.VALIDATION_ERRORS.getValue(), null, map, HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
@@ -92,6 +69,7 @@ public class UserService {
         userEntity.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         userEntity.setName(user.getFirstname());
         userEntity.setSurname(user.getLastname());
+        userEntity.setEmail(user.getEmail());
 
         if(user.getRoles() != null)
             for (Long id : user.getRoles()){
@@ -114,20 +92,24 @@ public class UserService {
         if(userEntity.isEmpty())
             map.put("userId", "data doesn't exist");
         if(!map.isEmpty()) {
-            log.error("UserService/updateUser method ended with userId doesn't exist -> status:" + HttpStatus.UNPROCESSABLE_ENTITY);
+            map.forEach((k, v) -> log.error("UserService/updateUser method ended with " + k + " ::: " +  v + "-> status=" + HttpStatus.UNPROCESSABLE_ENTITY));
             return MessageResponse.response(Reason.VALIDATION_ERRORS.getValue(), null, map, HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         List<Long> rolesIds = roleRepository.findAllIds();
         Optional<UserEntity> userByUserName = userRepository.findByUsernameIgnoreCase(user.getUsername());
+        Optional<UserEntity> userByEmail = userRepository.findByEmailIgnoreCase(user.getEmail());
 
         if(!CheckContains(user.getRoles(), rolesIds))
             map.put("roles", "problem with role id(s)");
         if(userByUserName.isPresent())
             if(!Objects.equals(userByUserName.get().getId(), userId) && userByUserName.get().getUsername().equalsIgnoreCase(user.getUsername()))
                 map.put("username", "username already exists");
+        if(userByEmail.isPresent())
+            if(!Objects.equals(userByEmail.get().getId(), userId) && userByEmail.get().getEmail().equalsIgnoreCase(user.getEmail()))
+                map.put("email", "email already exists");
         if(!map.isEmpty()){
-            log.error("UserService/updateUser method ended with username already exists -> status:" + HttpStatus.UNPROCESSABLE_ENTITY);
+            map.forEach((k, v) -> log.error("UserService/updateUser method ended with " + k + " ::: " +  v + "-> status=" + HttpStatus.UNPROCESSABLE_ENTITY));
             return MessageResponse.response(Reason.VALIDATION_ERRORS.getValue(), null, map, HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
@@ -135,6 +117,7 @@ public class UserService {
         userEntity.get().setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         userEntity.get().setName(user.getFirstname());
         userEntity.get().setSurname(user.getLastname());
+        userEntity.get().setEmail(user.getEmail());
 
         userEntity.get().getRoles().clear();
 
@@ -160,7 +143,7 @@ public class UserService {
         if(userEntity.isEmpty())
             map.put("id", "user id doesn't exist");
         if(!map.isEmpty()){
-            log.error("UserService/deleteUser method ended with userId doesn't exist -> status:" + HttpStatus.UNPROCESSABLE_ENTITY);
+            map.forEach((k, v) -> log.error("UserService/deleteUser method ended with " + k + " ::: " +  v + "-> status=" + HttpStatus.UNPROCESSABLE_ENTITY));
             return MessageResponse.response(Reason.VALIDATION_ERRORS.getValue(), null, map, HttpStatus.UNPROCESSABLE_ENTITY);
         }
 

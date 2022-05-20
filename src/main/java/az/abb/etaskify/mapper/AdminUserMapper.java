@@ -11,22 +11,22 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
-public interface UserMapper {
+public interface AdminUserMapper {
 
-    @Mapping(source = "roles", target = "roles", qualifiedByName = "setRoleToListLong")
+//    @Mapping(source = "roles", target = "roles", qualifiedByName = "setRoleToListLong")
     @Mapping(source = "name", target = "firstname")
     @Mapping(source = "surname", target = "lastname")
     List<UserDto> usersToUsersDto(List<UserEntity> userEntities);
 
-    @Mapping(source = "roles", target = "roles", qualifiedByName = "setRoleToListLong")
+//    @Mapping(source = "roles", target = "roles", qualifiedByName = "setRoleToListLong")
     @Mapping(source = "name", target = "firstname")
     @Mapping(source = "surname", target = "lastname")
     UserDto userToUserDto(UserEntity entity);
 
-    @Named("setRoleToListLong")
-    static List<Long> setRoleToListLong(Set<RoleEntity> roles) {
-        return roles.stream()
-                .map(RoleEntity::getId)
-                .collect(Collectors.toList());
-    }
+//    @Named("setRoleToListLong")
+//    static List<Long> setRoleToListLong(Set<RoleEntity> roles) {
+//        return roles.stream()
+//                .map(RoleEntity::getId)
+//                .collect(Collectors.toList());
+//    }
 }

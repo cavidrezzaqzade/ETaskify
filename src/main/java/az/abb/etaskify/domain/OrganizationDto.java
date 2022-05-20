@@ -24,27 +24,14 @@ public class OrganizationDto {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
-    @NotBlank(message = "username boş ola bilməz")
-    private String username;
+    @NotBlank(message = "orgName boş ola bilməz")
+    private String orgName;
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @NotBlank(message = "password boş ola bilməz")
-    private String password;
+    @NotBlank(message = "orgPhone boş ola bilməz")
+    private String orgPhone;
 
-    private String firstname;
+    @NotBlank(message = "orgAddress boş ola bilməz")
+    private String orgAddress;
 
-    private String lastname;
-
-    private boolean status;
-
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private LocalDateTime created;
-
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private LocalDateTime updated;
-
-    @NotNull(message = "rollar boş ola bilməz")
-    @NotEmpty(message = "rollar boş ola bilməz")
-    private List<@NotNull(message = "role id boş ola bilməz") @Min(value = 1, message = "role id 1-dən böyük olmalıdır") Long> roles;
 
 }

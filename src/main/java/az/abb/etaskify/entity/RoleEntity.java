@@ -19,7 +19,7 @@ import java.util.Set;
 public class RoleEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)//IDENTITY FOR PSQL
+    @GeneratedValue(strategy = GenerationType.IDENTITY)//IDENTITY FOR PSQL
     Long id;
 
     @Column(name = "role_name", nullable = false, unique = true)

@@ -1,6 +1,6 @@
 package az.abb.etaskify.controller;
 
-import az.abb.etaskify.domain.RoleDto;
+import az.abb.etaskify.domain.auth.RoleDto;
 import az.abb.etaskify.service.RoleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;

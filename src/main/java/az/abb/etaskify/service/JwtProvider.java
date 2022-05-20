@@ -1,6 +1,6 @@
 package az.abb.etaskify.service;
 
-import az.abb.etaskify.domain.User;
+import az.abb.etaskify.domain.auth.User;
 import az.abb.etaskify.exception.excModel.GeneralJwtException;
 import io.jsonwebtoken.*;
 import lombok.NonNull;

@@ -1,8 +1,8 @@
 package az.abb.etaskify.service;
 
-import az.abb.etaskify.domain.JwtRequest;
-import az.abb.etaskify.domain.Role;
-import az.abb.etaskify.domain.User;
+import az.abb.etaskify.domain.jwt.JwtRequest;
+import az.abb.etaskify.domain.auth.Role;
+import az.abb.etaskify.domain.auth.User;
 import az.abb.etaskify.exception.AuthException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

@@ -1,7 +1,7 @@
 package az.abb.etaskify.service;
 
-import az.abb.etaskify.domain.JwtAuthentication;
-import az.abb.etaskify.domain.Role;
+import az.abb.etaskify.domain.jwt.JwtAuthentication;
+import az.abb.etaskify.domain.auth.Role;
 import io.jsonwebtoken.Claims;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

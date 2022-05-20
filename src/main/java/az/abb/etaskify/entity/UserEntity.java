@@ -36,6 +36,9 @@ public class UserEntity {
     @Column(nullable = false)
     private boolean status = true;
 
+    @Column(nullable = false, unique = true)
+    private String email;
+
     @Column
     @CreationTimestamp
     private LocalDateTime created;
@@ -57,6 +60,9 @@ public class UserEntity {
 
     @ManyToMany(mappedBy = "users")
     private Set<TaskEntity> tasks = new HashSet<>();
+
+    @OneToOne(fetch = FetchType.LAZY)
+    private OrganizationEntity organization;
 
     public void addRole(RoleEntity roleEntity) {
         roles.add(roleEntity);
