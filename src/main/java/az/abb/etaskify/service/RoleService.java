@@ -6,6 +6,7 @@ import az.abb.etaskify.mapper.RoleMapper;
 import az.abb.etaskify.repository.RoleRepository;
 import az.abb.etaskify.response.MessageResponse;
 import az.abb.etaskify.response.Reason;
+import az.abb.etaskify.service.auth.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +33,7 @@ public class RoleService {
             map.forEach((k, v) -> log.error("RoleService/addNewRole method ended with " + k + " ::: " +  v + "-> status=" + HttpStatus.UNPROCESSABLE_ENTITY));
             return MessageResponse.response(Reason.ALREADY_EXIST.getValue(), null, map, HttpStatus.UNPROCESSABLE_ENTITY);
         }
+
         RoleEntity roleEntity = new RoleEntity();
         roleEntity.setRoleName(role.getRoleName().toUpperCase(Locale.ROOT));
 //        RoleEntity roleEntity = roleMapper.roleDtoToRole(role);

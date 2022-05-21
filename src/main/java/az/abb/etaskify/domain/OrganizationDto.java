@@ -24,13 +24,13 @@ public class OrganizationDto {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
-    @NotBlank(message = "orgName boş ola bilməz")
+    @NotBlank(message = "orgName can not be empty")
     private String orgName;
 
-    @NotBlank(message = "orgPhone boş ola bilməz")
+    @NotBlank(message = "orgPhone can not be empty")
     private String orgPhone;
 
-    @NotBlank(message = "orgAddress boş ola bilməz")
+    @NotBlank(message = "orgAddress can not be empty")
     private String orgAddress;
 
 

@@ -4,6 +4,8 @@ import az.abb.etaskify.domain.jwt.JwtRequest;
 import az.abb.etaskify.domain.auth.Role;
 import az.abb.etaskify.domain.auth.User;
 import az.abb.etaskify.exception.AuthException;
+import az.abb.etaskify.service.auth.AuthService;
+import az.abb.etaskify.service.auth.JwtProvider;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.junit.jupiter.api.Assertions;

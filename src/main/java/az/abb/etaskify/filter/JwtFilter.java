@@ -1,8 +1,8 @@
 package az.abb.etaskify.filter;
 
 import az.abb.etaskify.domain.jwt.JwtAuthentication;
-import az.abb.etaskify.service.JwtProvider;
-import az.abb.etaskify.service.JwtUtils;
+import az.abb.etaskify.service.auth.JwtProvider;
+import az.abb.etaskify.service.auth.JwtUtils;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

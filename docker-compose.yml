@@ -1,8 +1,8 @@
 version: '3.1'
 services:
   API:
-    container_name: book-app-auth
-    image: book-app-auth
+    container_name: e-taskify
+    image: e-taskify
     build: ./
     ports:
       - "8090:8080"

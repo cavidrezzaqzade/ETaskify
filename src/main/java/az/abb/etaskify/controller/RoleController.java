@@ -2,6 +2,7 @@ package az.abb.etaskify.controller;
 
 import az.abb.etaskify.domain.auth.RoleDto;
 import az.abb.etaskify.service.RoleService;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -12,6 +13,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+/**
+ * sistem de yanlız organization adminleri movcuddur deye heleki role ve organization emeliyyatları(add,update,delete etc) bağlıdır.
+ * ama umumi etaskify ucun super adminler teyin olunsa gelecekde bu endpointler acilacaq.
+ */
+
+@Hidden
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor

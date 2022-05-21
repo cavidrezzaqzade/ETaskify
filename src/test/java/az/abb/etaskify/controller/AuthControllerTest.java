@@ -6,7 +6,7 @@ import az.abb.etaskify.domain.jwt.RefreshJwtRequest;
 import az.abb.etaskify.filter.JwtFilter;
 import az.abb.etaskify.response.MessageResponse;
 import az.abb.etaskify.response.Reason;
-import az.abb.etaskify.service.AuthService;
+import az.abb.etaskify.service.auth.AuthService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;

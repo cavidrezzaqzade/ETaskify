@@ -1,4 +1,4 @@
-package az.abb.etaskify.service;
+package az.abb.etaskify.service.auth;
 
 import az.abb.etaskify.domain.jwt.JwtRequest;
 import az.abb.etaskify.domain.jwt.JwtResponse;
@@ -6,6 +6,7 @@ import az.abb.etaskify.domain.auth.User;
 import az.abb.etaskify.exception.AuthException;
 import az.abb.etaskify.response.MessageResponse;
 import az.abb.etaskify.response.Reason;
+import az.abb.etaskify.service.UserService;
 import io.jsonwebtoken.Claims;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -57,7 +58,7 @@ public class AuthService {
             if (saveRefreshToken != null && saveRefreshToken.equals(refreshToken)) {
                 final User user = userService.getByLogin(login)
                         .orElseThrow(() -> new AuthException("User is not found"));
-                final String accessToken = jwtProvider.generateAccessToken(user , accessTokenExpTimeMinutes * 60000);
+                final String accessToken = jwtProvider.generateAccessToken(user , accessTokenExpTimeMinutes);
                 final String newRefreshToken;
                 if(claims.getExpiration().getTime() - new Date().getTime() < ( accessTokenExpTimeMinutes + 1L)){//check if old refresh does not expired then return it instead new one // +1 because refresh token needs rest
                     newRefreshToken = jwtProvider.generateRefreshToken(user, refreshTokenExpTimeHours);
@@ -68,7 +69,7 @@ public class AuthService {
                     newRefreshToken = refreshStorage.get(user.getLogin());
                 }
                 log.info("authService/getAccessToken method ended -> status:" + HttpStatus.OK);
-                return MessageResponse.response(Reason.SUCCESS_GET.getValue(), new JwtResponse(accessToken, newRefreshToken, accessTokenExpTimeMinutes), null, HttpStatus.OK);
+                return MessageResponse.response(Reason.SUCCESS_GET.getValue(), new JwtResponse(accessToken, newRefreshToken, accessTokenExpTimeMinutes * 60000), null, HttpStatus.OK);
 //                return new JwtResponse(accessToken, null);
             }
         }

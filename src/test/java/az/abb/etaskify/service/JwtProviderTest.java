@@ -3,6 +3,7 @@ package az.abb.etaskify.service;
 import az.abb.etaskify.domain.auth.Role;
 import az.abb.etaskify.domain.auth.User;
 import az.abb.etaskify.exception.excModel.GeneralJwtException;
+import az.abb.etaskify.service.auth.JwtProvider;
 import io.jsonwebtoken.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;

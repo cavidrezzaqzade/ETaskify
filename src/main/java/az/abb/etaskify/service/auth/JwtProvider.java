@@ -1,4 +1,4 @@
-package az.abb.etaskify.service;
+package az.abb.etaskify.service.auth;
 
 import az.abb.etaskify.domain.auth.User;
 import az.abb.etaskify.exception.excModel.GeneralJwtException;

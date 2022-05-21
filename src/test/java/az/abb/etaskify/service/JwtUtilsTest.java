@@ -3,6 +3,8 @@ package az.abb.etaskify.service;
 import az.abb.etaskify.domain.jwt.JwtAuthentication;
 import az.abb.etaskify.domain.auth.Role;
 import az.abb.etaskify.domain.auth.User;
+import az.abb.etaskify.service.auth.JwtProvider;
+import az.abb.etaskify.service.auth.JwtUtils;
 import io.jsonwebtoken.Claims;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;

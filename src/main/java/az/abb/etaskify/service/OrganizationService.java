@@ -1,6 +1,7 @@
 package az.abb.etaskify.service;
 
 import az.abb.etaskify.domain.*;
+import az.abb.etaskify.domain.auth.InRole;
 import az.abb.etaskify.domain.auth.UserDto;
 import az.abb.etaskify.entity.OrganizationEntity;
 import az.abb.etaskify.entity.RoleEntity;
@@ -40,7 +41,7 @@ public class OrganizationService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final OrgMapper orgMapper;
-    private final AdminUserMapper ;
+    private final AdminUserMapper adminUserMapper;
 
     public ResponseEntity<?> addNewOrg(OrgUserDto orgUserDto){
         log.info("OrganizationService/addNewOrg method started");
@@ -79,12 +80,19 @@ public class OrganizationService {
         }
         else {
             RoleEntity adminRole = new RoleEntity();
-            adminRole.setRoleName("ADMIN");
+            adminRole.setRoleName(InRole.ADMIN.getRole());
             roleRepository.save(adminRole);
+
+            RoleEntity userRole = new RoleEntity();
+            userRole.setRoleName(InRole.USER.getRole());
+            roleRepository.save(userRole);
+
+            user.addRole(adminRole);
+//            user.addRole(userRole);
         }
 
         userRepository.save(user);
-        AdminUserDto userDto = .userToUserDto(user);
+        AdminUserDto userDto = adminUserMapper.userToUserDto(user);
 
         OrgUserDto orgUserDtoBack = getOrgUserDto(organizationDto, userDto);
         log.info("OrganizationService/addNewOrg method ended -> status:" + HttpStatus.OK);

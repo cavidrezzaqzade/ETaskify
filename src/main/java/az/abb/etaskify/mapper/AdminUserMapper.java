@@ -1,5 +1,6 @@
 package az.abb.etaskify.mapper;
 
+import az.abb.etaskify.domain.AdminUserDto;
 import az.abb.etaskify.domain.auth.UserDto;
 import az.abb.etaskify.entity.RoleEntity;
 import az.abb.etaskify.entity.UserEntity;
@@ -16,12 +17,12 @@ public interface AdminUserMapper {
 //    @Mapping(source = "roles", target = "roles", qualifiedByName = "setRoleToListLong")
     @Mapping(source = "name", target = "firstname")
     @Mapping(source = "surname", target = "lastname")
-    List<UserDto> usersToUsersDto(List<UserEntity> userEntities);
+    List<AdminUserDto> usersToUsersDto(List<UserEntity> userEntities);
 
 //    @Mapping(source = "roles", target = "roles", qualifiedByName = "setRoleToListLong")
     @Mapping(source = "name", target = "firstname")
     @Mapping(source = "surname", target = "lastname")
-    UserDto userToUserDto(UserEntity entity);
+    AdminUserDto userToUserDto(UserEntity entity);
 
 //    @Named("setRoleToListLong")
 //    static List<Long> setRoleToListLong(Set<RoleEntity> roles) {

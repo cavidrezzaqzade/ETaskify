@@ -3,8 +3,6 @@ package az.abb.etaskify.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author caci

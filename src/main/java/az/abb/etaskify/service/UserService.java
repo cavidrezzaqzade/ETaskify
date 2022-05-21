@@ -10,6 +10,7 @@ import az.abb.etaskify.repository.RoleRepository;
 import az.abb.etaskify.repository.UserRepository;
 import az.abb.etaskify.response.MessageResponse;
 import az.abb.etaskify.response.Reason;
+import az.abb.etaskify.service.auth.AuthService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;

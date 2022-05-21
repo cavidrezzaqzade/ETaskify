@@ -15,7 +15,7 @@ public class RoleDto {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
-    @NotEmpty(message = "role boş ola bilməz")
+    @NotEmpty(message = "role can not be empty")
 //    @NotNull(message = "{javax.validation.constraints.NotNull.message}")
     private String roleName;
 

@@ -24,18 +24,17 @@ public class TaskDto {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
-    @NotBlank(message = "title boş ola bilməz")
+    @NotBlank(message = "title can not be empty")
     private String title;
 
-    @NotBlank(message = "description boş ola bilməz")
+    @NotBlank(message = "description can not be empty")
     private String description;
 
-    @NotNull(message = "deadline boş ola bilməz")
     private LocalDate deadLine;
 
     private boolean status;
 
-    @NotNull(message = "users boş ola bilməz")
-    @NotEmpty(message = "users boş ola bilməz")
-    private List<@NotNull(message = "role id boş ola bilməz") @Min(value = 1, message = "user id 1-dən böyük olmalıdır") Long> users;
+    @NotNull(message = "users can not be empty")
+    @NotEmpty(message = "users can not be empty")
+    private List<@NotNull(message = "user id can not be empty") @Min(value = 1, message = "user id must be greater than zero") Long> users;
 }
