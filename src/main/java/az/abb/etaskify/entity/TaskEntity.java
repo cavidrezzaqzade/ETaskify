@@ -1,5 +1,6 @@
 package az.abb.etaskify.entity;
 
+import az.abb.etaskify.domain.task.TaskProgress;
 import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -33,8 +34,8 @@ public class TaskEntity {
     @Column(name = "dead_line")
     private LocalDate deadLine;
 
-    @Column(name = "status")
-    private boolean status = false;
+    @Column(name = "progress")
+    private String progress = TaskProgress.ADDED.getName();
 
     @ManyToMany
     @JoinTable(name="tasks_users",

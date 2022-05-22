@@ -1,6 +1,7 @@
 package az.abb.etaskify.controller;
 
-import az.abb.etaskify.domain.auth.TaskDto;
+import az.abb.etaskify.domain.task.ChangeProgressDto;
+import az.abb.etaskify.domain.task.TaskDto;
 import az.abb.etaskify.service.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -8,10 +9,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 
 /**
@@ -33,6 +32,29 @@ public class TaskController {
         return  taskService.addNewTask(task);
     }
 
+    @Operation(summary = "get my tasks", description = "get my tasks", tags = {"Task"}, security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("tasks")
+    public ResponseEntity<?> getMyTasks() {
+        return  taskService.getMyTasks();
+    }
 
+    @Operation(summary = "get all tasks", description = "get all tasks for admins", tags = {"Task"}, security = @SecurityRequirement(name = "bearerAuth"))
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("allTasks")
+    public ResponseEntity<?> getAllTasks() {
+        return  taskService.getAllTasks();
+    }
+
+    @Operation(summary = "get progresses", description = "get all progresses", tags = {"Task"}, security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("progress")
+    public ResponseEntity<?> getProgresses() {
+        return  taskService.getProgresses();
+    }
+
+    @Operation(summary = "change progress", description = "change your task progress", tags = {"Task"}, security = @SecurityRequirement(name = "bearerAuth"))
+    @PostMapping("progress")
+    public ResponseEntity<?> changeTaksProgress(@Valid @RequestBody ChangeProgressDto task) {
+        return  taskService.changeProgress(task);
+    }
 
 }

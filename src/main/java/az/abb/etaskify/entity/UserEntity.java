@@ -3,6 +3,8 @@ package az.abb.etaskify.entity;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.HashSet;

@@ -2,11 +2,11 @@ package az.abb.etaskify.domain.jwt;
 
 import lombok.Getter;
 import lombok.Setter;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
 public class RefreshJwtRequest {
-    @NotEmpty
+    @NotBlank(message = "can not be empty")
     public String refreshToken;
 }

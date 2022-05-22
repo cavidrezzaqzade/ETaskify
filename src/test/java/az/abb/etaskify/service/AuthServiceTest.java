@@ -65,11 +65,11 @@ class AuthServiceTest {
                 .build();
 
         jwtRequest = new JwtRequest();
-        jwtRequest.setLogin("cavid");
+        jwtRequest.setUsername("cavid");
         jwtRequest.setPassword("12345");
 
         jwtRequestWithWrongPass = new JwtRequest();
-        jwtRequestWithWrongPass.setLogin("cavid");
+        jwtRequestWithWrongPass.setUsername("cavid");
         jwtRequestWithWrongPass.setPassword("1234");
 
         final LocalDateTime now = LocalDateTime.now();
@@ -89,7 +89,7 @@ class AuthServiceTest {
     void givenLogin_WhenLogin_ThenUserNotFound() {
         //given
         String exception = "not found";
-        String userName = jwtRequest.getLogin();
+        String userName = jwtRequest.getUsername();
         given(userService.getByLogin(userName)).willReturn(Optional.empty());
 
         //when
@@ -105,7 +105,7 @@ class AuthServiceTest {
     void givenLogin_WhenLogin_ThenWrongPass() {
         //given
         String passException = "wrong password";
-        String userName = jwtRequestWithWrongPass.getLogin();
+        String userName = jwtRequestWithWrongPass.getUsername();
         given(userService.getByLogin(userName)).willReturn(Optional.of(user));
 
         //when
@@ -120,7 +120,7 @@ class AuthServiceTest {
     @DisplayName("test login ok")
     void givenLogin_WhenLogin_ThenOk() {
         //given
-        String userName = jwtRequest.getLogin();
+        String userName = jwtRequest.getUsername();
         given(userService.getByLogin(userName)).willReturn(Optional.of(user));
 
         //when

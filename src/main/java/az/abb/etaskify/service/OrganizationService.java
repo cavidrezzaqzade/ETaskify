@@ -43,18 +43,53 @@ public class OrganizationService {
     private final OrgMapper orgMapper;
     private final AdminUserMapper adminUserMapper;
 
+    private enum Org{
+        ADD_METHOD("OrganizationService/addNewOrg");
+
+        private final String methodName;
+
+        Org(String methodName){
+            this.methodName = methodName;
+        }
+
+        public String getMethodName(){
+            return methodName;
+        }
+    }
+
+    private enum FieldMessage{
+        ORG_NAME("orgName", "data already exists"),
+        USER_NAME("username", "data already exists"),
+        EMAIL("email", "data already exists");
+
+        private final String field;
+        private final String message;
+
+        FieldMessage(String field, String message){
+            this.message = message;
+            this.field = field;
+        }
+
+        public String getField(){
+            return field;
+        }
+        public String getMessage(){
+            return message;
+        }
+    }
+
     public ResponseEntity<?> addNewOrg(OrgUserDto orgUserDto){
-        log.info("OrganizationService/addNewOrg method started");
+        log.info(Org.ADD_METHOD.getMethodName() + " method started");
         Map<String, String> map = new HashMap<>();
 
         if(orgRepository.existsByOrgNameIgnoreCase(orgUserDto.getOrganizationDto().getOrgName()))
-            map.put("orgName", "data already exists");
+            map.put(FieldMessage.ORG_NAME.getField(), FieldMessage.ORG_NAME.getMessage());
         if(userRepository.existsByUsernameIgnoreCase(orgUserDto.getAdminDto().getUsername()))
-            map.put("username", "data already exists");
+            map.put(FieldMessage.USER_NAME.getField(), FieldMessage.USER_NAME.getMessage());
         if(userRepository.existsByEmailIgnoreCase(orgUserDto.getAdminDto().getEmail()))
-            map.put("email", "data already exists");
+            map.put(FieldMessage.EMAIL.getField(), FieldMessage.EMAIL.getMessage());
         if(!map.isEmpty()) {
-            map.forEach((k, v) -> log.error("OrganizationService/addNewOrg method ended with " + k + " ::: " +  v + "-> status=" + HttpStatus.UNPROCESSABLE_ENTITY));
+            map.forEach((k, v) -> log.error(Org.ADD_METHOD.getMethodName() + " method ended with " + k + " : " +  v + "-> status=" + HttpStatus.UNPROCESSABLE_ENTITY));
             return MessageResponse.response(Reason.VALIDATION_ERRORS.getValue(), null, map, HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
@@ -95,7 +130,7 @@ public class OrganizationService {
         AdminUserDto userDto = adminUserMapper.userToUserDto(user);
 
         OrgUserDto orgUserDtoBack = getOrgUserDto(organizationDto, userDto);
-        log.info("OrganizationService/addNewOrg method ended -> status:" + HttpStatus.OK);
+        log.info(Org.ADD_METHOD.getMethodName() + " method ended -> status:" + HttpStatus.OK);
         return MessageResponse.response(Reason.SUCCESS_ADD.getValue(), orgUserDtoBack, null, HttpStatus.OK);
     }
 

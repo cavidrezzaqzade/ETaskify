@@ -31,26 +31,41 @@ public class AuthService {
     private final Map<String, String> refreshStorage = new HashMap<>();
     private final JwtProvider jwtProvider;
 
+    private enum Auth{
+        LOGIN("AuthService/login"),
+        GET_ACCESS_TOKEN("AuthService/getAccessToken");
+
+        private final String methodName;
+
+        Auth(String methodName){
+            this.methodName = methodName;
+        }
+
+        public String getName(){
+            return methodName;
+        }
+    }
+
     public ResponseEntity<?> login(@NonNull JwtRequest authRequest) {
-        log.info("authService/login method started");
-        final User user = userService.getByLogin(authRequest.getLogin())
+        log.info(Auth.LOGIN.getName() + " method started");
+        final User user = userService.getByLogin(authRequest.getUsername())
                 .orElseThrow(() -> new AuthException("User is not found"));
 //        if (user.getPassword().equals(authRequest.getPassword())) {
         if (new BCryptPasswordEncoder().matches(authRequest.getPassword(), user.getPassword())) {
             final String accessToken = jwtProvider.generateAccessToken(user, accessTokenExpTimeMinutes);
             final String refreshToken = jwtProvider.generateRefreshToken(user, refreshTokenExpTimeHours);
             refreshStorage.put(user.getLogin(), refreshToken);
-            log.info("authService/login method ended -> status:" + HttpStatus.OK);
+            log.info(Auth.LOGIN.getName() + " method ended -> status:" + HttpStatus.OK);
             return MessageResponse.response(Reason.SUCCESS_GET.getValue(), new JwtResponse(accessToken, refreshToken, accessTokenExpTimeMinutes * 60000), null, HttpStatus.OK);
 //            return new JwtResponse(accessToken, refreshToken);
         } else {
-            log.error("authService/login method ended with wrong password -> status:" + HttpStatus.UNPROCESSABLE_ENTITY);
+            log.error(Auth.LOGIN.getName() + " method ended with wrong password -> status:" + HttpStatus.UNPROCESSABLE_ENTITY);
             throw new AuthException("wrong password");
         }
     }
 
     public ResponseEntity<?> getAccessToken(@NonNull String refreshToken) {
-        log.info("authService/getAccessToken method started");
+        log.info(Auth.GET_ACCESS_TOKEN.getName() + " method started");
         if (jwtProvider.validateRefreshToken(refreshToken)) {
             final Claims claims = jwtProvider.getRefreshClaims(refreshToken);
             final String login = claims.getSubject();
@@ -68,12 +83,12 @@ public class AuthService {
                 else{
                     newRefreshToken = refreshStorage.get(user.getLogin());
                 }
-                log.info("authService/getAccessToken method ended -> status:" + HttpStatus.OK);
+                log.info(Auth.GET_ACCESS_TOKEN.getName() + " method ended -> status:" + HttpStatus.OK);
                 return MessageResponse.response(Reason.SUCCESS_GET.getValue(), new JwtResponse(accessToken, newRefreshToken, accessTokenExpTimeMinutes * 60000), null, HttpStatus.OK);
 //                return new JwtResponse(accessToken, null);
             }
         }
-        log.error("authService/getAccessToken method ended with invalid jwt token -> status:" + HttpStatus.UNPROCESSABLE_ENTITY);
+        log.error(Auth.GET_ACCESS_TOKEN.getName() + " method ended with invalid jwt token -> status:" + HttpStatus.UNPROCESSABLE_ENTITY);
         throw new AuthException("Invalid JWT token");
 //        return new JwtResponse(null, null);
     }

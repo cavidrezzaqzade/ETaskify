@@ -2,6 +2,7 @@ package az.abb.etaskify.service;
 
 import az.abb.etaskify.domain.auth.User;
 import az.abb.etaskify.domain.auth.UserDto;
+import az.abb.etaskify.entity.OrganizationEntity;
 import az.abb.etaskify.entity.RoleEntity;
 import az.abb.etaskify.entity.UserEntity;
 import az.abb.etaskify.exception.AuthException;
@@ -11,6 +12,7 @@ import az.abb.etaskify.repository.UserRepository;
 import az.abb.etaskify.response.MessageResponse;
 import az.abb.etaskify.response.Reason;
 import az.abb.etaskify.service.auth.AuthService;
+import az.abb.etaskify.service.auth.TokenService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -30,6 +32,7 @@ public class UserService {
     private final RoleRepository roleRepository;
     private final UserMapper userMapper;
     private final Converter converter;
+    private final TokenService tokenService;
 
     public Optional<User> getByLogin(@NonNull String login) {//username ve login equalsIgnoreCase() ile yoxlanilir
         log.info("UserService/getByLogin method started");
@@ -42,8 +45,14 @@ public class UserService {
 
     public ResponseEntity<?> getUsers(){
         log.info("UserService/getUsers method started");
-        List<UserEntity> users = userRepository.findAll();
-        List<UserDto> usersDto = userMapper.usersToUsersDto(users);
+        List<UserDto> usersDto = new ArrayList<>();
+
+        Optional<OrganizationEntity> org = tokenService.getOrganizationFromToken();
+        if(org.isPresent()){
+            List<UserEntity> users = userRepository.getAllByOrganization(org.get());
+            usersDto = userMapper.usersToUsersDto(users);
+        }
+
         log.info("UserService/getUsers method ended -> status:" + HttpStatus.OK);
         return MessageResponse.response(Reason.SUCCESS_GET.getValue(), usersDto, null, HttpStatus.OK);
     }
@@ -79,6 +88,15 @@ public class UserService {
                 userEntity.addRole(role);
             }
 
+        Optional<OrganizationEntity> organizationEntity = tokenService.getOrganizationFromToken();
+        if(organizationEntity.isPresent()) {
+            userEntity.setOrganization(organizationEntity.get());
+        }
+        else {
+            map.put("organization", "organization not found by given token");
+            return MessageResponse.response(Reason.VALIDATION_ERRORS.getValue(), null, map, HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+
         userRepository.save(userEntity);
         UserDto userDto = userMapper.userToUserDto(userEntity);
         log.info("UserService/addNewUser method ended -> status:" + HttpStatus.OK);
@@ -95,6 +113,14 @@ public class UserService {
         if(!map.isEmpty()) {
             map.forEach((k, v) -> log.error("UserService/updateUser method ended with " + k + " ::: " +  v + "-> status=" + HttpStatus.UNPROCESSABLE_ENTITY));
             return MessageResponse.response(Reason.VALIDATION_ERRORS.getValue(), null, map, HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+
+        Optional<OrganizationEntity> org = tokenService.getOrganizationFromToken();
+        if(org.isPresent()){
+            if(!Objects.equals(org.get().getId(), userEntity.get().getOrganization().getId())){
+                map.put("organization","this user does not belong to this admin's organization");
+                return MessageResponse.response(Reason.VALIDATION_ERRORS.getValue(), null, map, HttpStatus.UNPROCESSABLE_ENTITY);
+            }
         }
 
         List<Long> rolesIds = roleRepository.findAllIds();
@@ -146,6 +172,14 @@ public class UserService {
         if(!map.isEmpty()){
             map.forEach((k, v) -> log.error("UserService/deleteUser method ended with " + k + " ::: " +  v + "-> status=" + HttpStatus.UNPROCESSABLE_ENTITY));
             return MessageResponse.response(Reason.VALIDATION_ERRORS.getValue(), null, map, HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+
+        Optional<OrganizationEntity> org = tokenService.getOrganizationFromToken();
+        if(org.isPresent()){
+            if(!Objects.equals(org.get().getId(), userEntity.get().getOrganization().getId())){
+                map.put("organization","this user does not belong to this admin's organization");
+                return MessageResponse.response(Reason.VALIDATION_ERRORS.getValue(), null, map, HttpStatus.UNPROCESSABLE_ENTITY);
+            }
         }
 
         userRepository.deleteById(userId);

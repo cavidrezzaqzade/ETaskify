@@ -23,84 +23,111 @@ public class RoleService {
     private final RoleRepository roleRepository;
     private final RoleMapper roleMapper;
 
+    private enum Role{
+        ADD_METHOD("RoleService/addNewRole"),
+        GET_METHOD("RoleService/getRoles"),
+        DELETE_METHOD("RoleService/deleteRole"),
+        UPDATE_METHOD("RoleService/updateRole");
+
+        private final String methodName;
+
+        Role(String methodName){
+            this.methodName = methodName;
+        }
+
+        public String getName(){
+            return methodName;
+        }
+    }
+
+    private enum FieldMessage{
+        ROLE_ID("role_id", "does not exist"),
+        ROLE_FOREIGN("role_id", "foreign key constraint violation"),
+        ROLE_NAME("roleName", "already exists");
+
+        private final String field;
+        private final String message;
+
+        FieldMessage(String field, String message){
+            this.message = message;
+            this.field = field;
+        }
+
+        public String getField(){
+            return field;
+        }
+        public String getMessage(){
+            return message;
+        }
+    }
+
     public ResponseEntity<?> addNewRole(RoleDto role){
-        log.info("RoleService/addNewRole method started");
+        log.info(Role.ADD_METHOD.getName() + " method started");
         Map<String, String> map = new HashMap<>();
 
         if(roleRepository.existsByRoleNameIgnoreCase(role.getRoleName()))
-            map.put("roleName", "already exists");
-        if(!map.isEmpty()) {
-            map.forEach((k, v) -> log.error("RoleService/addNewRole method ended with " + k + " ::: " +  v + "-> status=" + HttpStatus.UNPROCESSABLE_ENTITY));
-            return MessageResponse.response(Reason.ALREADY_EXIST.getValue(), null, map, HttpStatus.UNPROCESSABLE_ENTITY);
-        }
+            return responseValidation(FieldMessage.ROLE_NAME, Role.ADD_METHOD.getName());
 
         RoleEntity roleEntity = new RoleEntity();
         roleEntity.setRoleName(role.getRoleName().toUpperCase(Locale.ROOT));
-//        RoleEntity roleEntity = roleMapper.roleDtoToRole(role);
         roleRepository.save(roleEntity);
 
         RoleDto dto = roleMapper.roleToRoleDto(roleEntity);
-        log.info("RoleService/addNewRole method ended -> status:" + HttpStatus.OK);
+        log.info(Role.ADD_METHOD.getName() + " method ended -> status:" + HttpStatus.OK);
         return MessageResponse.response(Reason.SUCCESS_ADD.getValue(), dto, null, HttpStatus.OK);
     }
 
     public ResponseEntity<?> getRoles(){
-        log.info("RoleService/getRoles method started");
+        log.info(Role.GET_METHOD.getName() + " method started");
         List<RoleEntity> users = roleRepository.findAll();
         List<RoleDto> roleDtos = roleMapper.rolesToRoleDtos(users);
-        log.info("RoleService/getRoles method ended -> status:" + HttpStatus.OK);
+        log.info(Role.GET_METHOD.getName() + " method ended -> status:" + HttpStatus.OK);
         return MessageResponse.response(Reason.SUCCESS_GET.getValue(), roleDtos, null, HttpStatus.OK);
     }
 
     public ResponseEntity<?> deleteRole(Long roleId){
-        log.info("RoleService/deleteRole method started");
+        log.info(Role.DELETE_METHOD.getName() + " method started");
         Map<String, String> map = new HashMap<>();
 
         Optional<RoleEntity> roleEntity = roleRepository.findById(roleId);
         if(roleEntity.isEmpty())
-            map.put("roleId", "role does not exist");
-        if(!map.isEmpty()){
-            map.forEach((k, v) -> log.error("RoleService/deleteRole method ended with " + k + " ::: " +  v + "-> status=" + HttpStatus.UNPROCESSABLE_ENTITY));
-            return MessageResponse.response(Reason.VALIDATION_ERRORS.getValue(), null, map, HttpStatus.UNPROCESSABLE_ENTITY);
-        }
+            return responseValidation(FieldMessage.ROLE_ID, Role.DELETE_METHOD.getName());
 
         if(!roleEntity.get().getUsers().isEmpty())
-            map.put("roleId", "foreign key constraint violation");
-        if(!map.isEmpty()){
-            map.forEach((k, v) -> log.error("RoleService/deleteRole method ended with " + k + " ::: " +  v + "-> status=" + HttpStatus.UNPROCESSABLE_ENTITY));
-            return MessageResponse.response(Reason.VALIDATION_ERRORS.getValue(), null, map, HttpStatus.UNPROCESSABLE_ENTITY);
-        }
+            return responseValidation(FieldMessage.ROLE_FOREIGN, Role.DELETE_METHOD.getName());
 
         roleRepository.delete(roleEntity.get());
         RoleDto dto = roleMapper.roleToRoleDto(roleEntity.get());
-        log.info("RoleService/deleteRole method ended -> status:" + HttpStatus.OK);
+        log.info(Role.DELETE_METHOD.getName() + " method ended -> status:" + HttpStatus.OK);
         return MessageResponse.response(Reason.SUCCESS_DELETE.getValue(), dto, null, HttpStatus.OK);
     }
 
     public ResponseEntity<?> updateRole(RoleDto role, Long roleId){
-        log.info("RoleService/updateRole method started");
+        log.info(Role.UPDATE_METHOD.getName() + " method started");
         Map<String, String> map = new HashMap<>();
         Optional<RoleEntity> roleEntity = roleRepository.findById(roleId);
 
         if(roleEntity.isEmpty())
-            map.put("roleId", "role does not exist");
-        if(!map.isEmpty()) {
-            map.forEach((k, v) -> log.error("RoleService/updateRole method ended with " + k + " ::: " +  v + "-> status=" + HttpStatus.UNPROCESSABLE_ENTITY));
-            return MessageResponse.response(Reason.VALIDATION_ERRORS.getValue(), null, map, HttpStatus.UNPROCESSABLE_ENTITY);
-        }
+            return responseValidation(FieldMessage.ROLE_ID, Role.UPDATE_METHOD.getName());
+
         Optional<RoleEntity> roleByRoleName = roleRepository.findByRoleNameIgnoreCase(role.getRoleName());
         if(roleByRoleName.isPresent())
             if(!Objects.equals(roleByRoleName.get().getId(), roleId) && roleByRoleName.get().getRoleName().equalsIgnoreCase(role.getRoleName()))
-                map.put("roleName", "roleName already exists");
-        if(!map.isEmpty()) {
-            map.forEach((k, v) -> log.error("RoleService/updateRole method ended with " + k + " ::: " +  v + "-> status=" + HttpStatus.UNPROCESSABLE_ENTITY));
-            return MessageResponse.response(Reason.VALIDATION_ERRORS.getValue(), null, map, HttpStatus.UNPROCESSABLE_ENTITY);
-        }
+                return responseValidation(FieldMessage.ROLE_NAME, Role.UPDATE_METHOD.getName());
+
         roleEntity.get().setRoleName(role.getRoleName().toUpperCase(Locale.ROOT));
         roleRepository.save(roleEntity.get());
 
         RoleDto dto = roleMapper.roleToRoleDto(roleEntity.get());
-        log.info("RoleService/updateRole method ended -> status:" + HttpStatus.OK);
+        log.info(Role.UPDATE_METHOD.getName() + " method ended -> status:" + HttpStatus.OK);
         return MessageResponse.response(Reason.SUCCESS_UPDATE.getValue(), dto, null, HttpStatus.OK);
     }
+
+    private ResponseEntity<?> responseValidation(FieldMessage fm, String methodName){
+        Map<String, String> map = new HashMap<>();
+        map.put(fm.getField(), fm.getMessage());
+        map.forEach((k, v) -> log.error(methodName + " method ended with " + k + " : " +  v + " -> status:" + HttpStatus.UNPROCESSABLE_ENTITY));
+        return MessageResponse.response(Reason.VALIDATION_ERRORS.getValue(), null, map, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
 }

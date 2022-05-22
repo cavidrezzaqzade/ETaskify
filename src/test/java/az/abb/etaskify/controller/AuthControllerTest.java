@@ -66,7 +66,7 @@ class AuthControllerTest {
     @BeforeAll
     static void setUpAll(){
         jwtRequest = new JwtRequest();
-        jwtRequest.setLogin("cavid");
+        jwtRequest.setUsername("cavid");
         jwtRequest.setPassword("12345");
 
         refreshJwtRequest = new RefreshJwtRequest();

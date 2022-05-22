@@ -1,12 +1,9 @@
-package az.abb.etaskify.domain.auth;
+package az.abb.etaskify.domain.task;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -24,17 +21,19 @@ public class TaskDto {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
-    @NotBlank(message = "title can not be empty")
+    @NotBlank(message = "can not be empty")
     private String title;
 
-    @NotBlank(message = "description can not be empty")
+    @NotBlank(message = "can not be empty")
     private String description;
 
     private LocalDate deadLine;
 
-    private boolean status;
+    @Min(value = 0, message = "progress must be between 0-2")
+    @Max(value = 2, message = "progress must be between 0-2")
+    private Integer progress;
 
-    @NotNull(message = "users can not be empty")
-    @NotEmpty(message = "users can not be empty")
+    @NotNull(message = "can not be empty")
+    @NotEmpty(message = "can not be empty")
     private List<@NotNull(message = "user id can not be empty") @Min(value = 1, message = "user id must be greater than zero") Long> users;
 }

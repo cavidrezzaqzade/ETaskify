@@ -1,5 +1,6 @@
 package az.abb.etaskify.repository;
 
+import az.abb.etaskify.entity.OrganizationEntity;
 import az.abb.etaskify.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,6 +16,8 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     Optional<UserEntity> findByUsernameIgnoreCase(String userName);
     Optional<UserEntity> findByEmailIgnoreCase(String email);
 
-    @Query(value = "select u.id from users u", nativeQuery = true)
-    List<Long> findAllIds();
+    List<UserEntity> getAllByOrganization(OrganizationEntity organization);
+
+    @Query(value = "select u.id from users u where organization_id =:orgId", nativeQuery = true)
+    List<Long> findAllIds(Long orgId);
 }
