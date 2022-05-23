@@ -67,7 +67,7 @@ class AuthControllerTest {
     static void setUpAll(){
         jwtRequest = new JwtRequest();
         jwtRequest.setUsername("cavid");
-        jwtRequest.setPassword("12345");
+        jwtRequest.setPassword("123456");
 
         refreshJwtRequest = new RefreshJwtRequest();
         refreshJwtRequest.setRefreshToken("dumb");
@@ -122,7 +122,7 @@ class AuthControllerTest {
         given(authService.getAccessToken(any())).willReturn(response);
 
         //when
-        ResultActions result = mockMvc.perform(post("/auth/token")
+        ResultActions result = mockMvc.perform(post("/auth/refresh")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(refreshJwtRequest)));

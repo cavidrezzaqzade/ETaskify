@@ -70,8 +70,8 @@ class UserControllerTest {
 
     @BeforeAll
     static void setUpAll(){
-        userDto = UserDto.builder().id(1L).roles(List.of(1L, 2L)).username("cavid").password("12345").email("exmple@gmail.com").build();
-        userDto2 = UserDto.builder().id(2L).username("xanlar").password("dumb").email("example@gmail.com").build();
+        userDto = UserDto.builder().id(1L).roles(List.of(1L, 2L)).username("cavid").password("123456").email("exmple@gmail.com").build();
+        userDto2 = UserDto.builder().id(2L).username("xanlar").password("123456").email("example@gmail.com").build();
 
         users = List.of(userDto, userDto2);
 

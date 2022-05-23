@@ -39,6 +39,7 @@ class UserRepositoryTest {
                 .password("12345")
                 .name("c")
                 .surname("r")
+                .email("example@gmail.com")
                 .build();
 
         userRepository.save(user);

@@ -28,7 +28,7 @@ public class TaskController {
     @Operation(summary = "add task", description = "add new task", tags = {"Task"}, security = @SecurityRequirement(name = "bearerAuth"))
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("tasks")
-    public ResponseEntity<?> addNewUser(@Valid @RequestBody TaskDto task) {
+    public ResponseEntity<?> addNewTask(@Valid @RequestBody TaskDto task) {
         return  taskService.addNewTask(task);
     }
 

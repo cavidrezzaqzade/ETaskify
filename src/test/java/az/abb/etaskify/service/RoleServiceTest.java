@@ -74,6 +74,7 @@ class RoleServiceTest {
         UserEntity user1 = UserEntity.builder()
                 .username("cavid")
                 .password("12345")
+                .email("example@gmail.com")
                 .name("caci")
                 .build();
 
@@ -101,11 +102,11 @@ class RoleServiceTest {
         responseModelDTOUnprocessableFk = MessageResponse.response(Reason.VALIDATION_ERRORS.getValue(), null, map2, HttpStatus.UNPROCESSABLE_ENTITY);
 
         Map<String, String> map3 = new HashMap<>();
-        map3.put("roleId", "role does not exist");
+        map3.put("roleId", "does not exist");
         responseModelDTOUnprocessableDoesNotExist = MessageResponse.response(Reason.VALIDATION_ERRORS.getValue(), null, map3, HttpStatus.UNPROCESSABLE_ENTITY);
 
         Map<String, String> map4 = new HashMap<>();
-        map4.put("roleName", "roleName already exists");
+        map4.put("roleName", "already exists");
         responseModelDTOUnprocessableAlreadyExist = MessageResponse.response(Reason.VALIDATION_ERRORS.getValue(), null, map4, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 

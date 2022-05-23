@@ -41,8 +41,8 @@ public class RoleService {
     }
 
     private enum FieldMessage{
-        ROLE_ID("role_id", "does not exist"),
-        ROLE_FOREIGN("role_id", "foreign key constraint violation"),
+        ROLE_ID("roleId", "does not exist"),
+        ROLE_FOREIGN("roleId", "foreign key constraint violation"),
         ROLE_NAME("roleName", "already exists");
 
         private final String field;
